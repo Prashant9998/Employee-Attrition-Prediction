@@ -8,3 +8,8 @@ seaborn
 streamlit
 nbformat
 jupyter
+plotly
+joblib
+requests
+streamlit-lottie
+flask
