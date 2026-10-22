@@ -7,8 +7,10 @@ from flask import Flask, request, jsonify, render_template_string
 def get_model_dir():
     candidates = [
         os.path.join(os.path.dirname(__file__), 'Model'),
+        os.path.join(os.path.dirname(__file__), 'api', 'Model'),
         os.path.join(os.path.dirname(__file__), '..', 'Model'),
         os.path.join(os.getcwd(), 'Model'),
+        os.path.join(os.getcwd(), 'api', 'Model'),
         os.path.join(os.getcwd(), '..', 'Model'),
     ]
     for c in candidates:
@@ -597,10 +599,13 @@ def create_app():
     flask_app = Flask(__name__)
 
     @flask_app.route('/', methods=['GET'])
+    @flask_app.route('/api', methods=['GET'])
+    @flask_app.route('/api/index', methods=['GET'])
     def home():
         return render_template_string(HTML_TEMPLATE)
 
     @flask_app.route('/api/predict', methods=['POST'])
+    @flask_app.route('/predict', methods=['POST'])
     def predict_endpoint():
         try:
             req_data = request.get_json(silent=True) or request.form.to_dict() or {}
@@ -610,6 +615,7 @@ def create_app():
             return jsonify({'success': False, 'error': str(e)}), 400
 
     @flask_app.route('/health', methods=['GET'])
+    @flask_app.route('/api/health', methods=['GET'])
     def health():
         return jsonify({
             'status': 'healthy',

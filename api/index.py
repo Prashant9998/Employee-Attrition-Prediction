@@ -1,10 +1,13 @@
-import sys
 import os
+import sys
 
-# Add parent directory to path so flask_app can be imported
+# Ensure local api folder and parent are on sys.path
+sys.path.insert(0, os.path.dirname(__file__))
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from flask_app import app
+try:
+    from flask_app import app
+except ImportError:
+    from api.flask_app import app
 
-# Vercel entrypoint
-# app is exported at the top-level
+application = app
